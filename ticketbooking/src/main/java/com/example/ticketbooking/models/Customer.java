@@ -6,19 +6,19 @@ import jakarta.validation.constraints.NotNull;
 public class Customer {
 
     @NotNull(message = "An id is required.")
-    int customerId;
+    private int customerId;
 
     @NotNull(message = "A first name is required.")
     @NotBlank(message = "First name cannot be blank")
-    String firstName;
+    private String firstName;
 
     @NotNull(message = "A last name is required.")
     @NotBlank(message = "Last name cannot be blank.")
-    String lastName;
+    private String lastName;
 
     @NotNull(message = "Email is required.")
     @NotBlank(message = "Email cannot be blank.")
-    String email;
+    private String email;
 
     public int getCustomerId() {
         return customerId;
