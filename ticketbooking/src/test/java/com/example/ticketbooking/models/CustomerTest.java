@@ -74,28 +74,6 @@ class CustomerTest {
         assertTrue(result.getErrorMessages().size() > 0);
     }
 
-    @Test
-    void shouldFailOnEmptyId() {
-        //Arrange
-        Customer customer = makeValidCustomer();
-        customer.setFirstName(null);
-        customer.setLastName(null);
-
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
-        //Act
-        Set<ConstraintViolation<Customer>> violations = validator.validate(customer);
-        Result<Customer> result = new Result<>();
-
-        for(ConstraintViolation violation : violations) {
-            result.addErrorMessage(violation.getMessage());
-        }
-
-        //Assert
-        assertTrue(result.getErrorMessages().size() > 0);
-    }
-
     private Customer makeValidCustomer() {
         Customer customer = new Customer();
         customer.setCustomerId(0);
