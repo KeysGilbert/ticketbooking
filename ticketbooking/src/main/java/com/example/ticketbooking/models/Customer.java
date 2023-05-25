@@ -3,6 +3,9 @@ package com.example.ticketbooking.models;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Customer {
 
     @NotNull(message = "An id is required.")
@@ -19,6 +22,16 @@ public class Customer {
     @NotNull(message = "Email is required.")
     @NotBlank(message = "Email cannot be blank.")
     private String email;
+
+    private List<Ticket> tickets = new ArrayList<>();
+
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
+    }
 
     public int getCustomerId() {
         return customerId;
