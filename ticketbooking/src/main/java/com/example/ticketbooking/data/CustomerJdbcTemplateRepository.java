@@ -37,7 +37,7 @@ public class CustomerJdbcTemplateRepository implements CustomerRepository {
     @Override
     public Customer findById(int id) {
         final String sql = "SELECT customer_id, first_name, last_name, email FROM Customers WHERE customer_id = ?;";
-        return jdbcTemplate.query(sql, (resultSet, rowNum) -> {
+        Customer result = jdbcTemplate.query(sql, (resultSet, rowNum) -> {
             Customer customer = new Customer();
             customer.setCustomerId(resultSet.getInt("customer_id"));
             customer.setFirstName(resultSet.getString("first_name"));
@@ -45,6 +45,12 @@ public class CustomerJdbcTemplateRepository implements CustomerRepository {
             customer.setEmail(resultSet.getString("email"));
             return customer;
         }, id).stream().findFirst().orElse(null);
+
+        if(result != null) {
+            addTickets(result);
+        }
+
+        return result;
     }
 
     @Override
@@ -85,5 +91,18 @@ public class CustomerJdbcTemplateRepository implements CustomerRepository {
         return rowsDeleted > 0;
     }
 
-    //TODO: implement method to add tickets for particular customer
+    public void addTickets(Customer customer) {
+        //grab ticket and customer info for particular customer
+        final String sql = "SELECT t.ticket_id, t.movie_id, t.customer_id, c.first_name, c.last_name FROM Tickets t " +
+                "INNER JOIN Customers c ON c.customer_id = t.customer_id WHERE c.customer_id = ?;";
+        var tickets = jdbcTemplate.query(sql, (resultSet, rowNum) -> {
+            Ticket ticket = new Ticket();
+            ticket.setTicket_id(resultSet.getInt("ticket_id"));
+            ticket.setCustomer_id(resultSet.getInt("customer_id"));
+            ticket.setMovie_id(resultSet.getInt("movie_id"));
+            return ticket;
+        }, customer.getCustomerId());
+
+        customer.setTickets(tickets);
+    }
 }
