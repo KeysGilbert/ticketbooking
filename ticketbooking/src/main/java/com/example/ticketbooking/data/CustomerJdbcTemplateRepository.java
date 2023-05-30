@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -54,6 +55,7 @@ public class CustomerJdbcTemplateRepository implements CustomerRepository {
     }
 
     @Override
+    @Transactional
     public Customer add(Customer customer) {
         final String sql = "INSERT INTO Customers (first_name, last_name, email) " +
                 "VALUES (?, ?, ?);";
@@ -78,6 +80,7 @@ public class CustomerJdbcTemplateRepository implements CustomerRepository {
     }
 
     @Override
+    @Transactional
     public boolean update(Customer customer) {
         final String sql = "UPDATE Customers SET first_name = ?, last_name = ?, email = ? WHERE customer_id = ?;";
         int rowsUpdated = jdbcTemplate.update(sql, customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getCustomerId());
@@ -85,6 +88,7 @@ public class CustomerJdbcTemplateRepository implements CustomerRepository {
     }
 
     @Override
+    @Transactional
     public boolean delete(int id) {
         final String sql = "DELETE FROM Customers WHERE customer_id = ?;";
         int rowsDeleted = jdbcTemplate.update(sql, id);
